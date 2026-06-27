@@ -456,7 +456,21 @@ export const getOrderById = (id) => {
   return orders.find(o => o.id === id);
 };
 
+export const updateUserPassword = async (email, newRawPassword) => {
+  const hashedPassword = await bcrypt.hash(newRawPassword, 10);
+  const index = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+  if (index === -1) return false;
+  
+  // Update in-memory
+  users[index].password = hashedPassword;
+  
+  // Update SQLite
+  await DBUser.update({ password: hashedPassword }, { where: { email: email.toLowerCase() } });
+  return true;
+};
+
 // Export initializeUsers for compatibility, but map it to our DB load function
 const initializeUsersExport = initializeUsersStore;
 
 export { users, products, carts, orders, initializeUsersExport as initializeUsers };
+
