@@ -1,4 +1,4 @@
-# UrbanCart Monorepo
+# LUMISTYLE Monorepo
 
 This repository contains both the frontend React application and the backend API server for UrbanCart.
 
@@ -18,4 +18,4 @@ To run both the frontend and backend concurrently:
 ## Folder Structure
 
 * `backend/`: Node.js Express server running on port 5000.
-* `simple-product-app/`: React Vite frontend running on port 5173.
+* `frontend/`: React Vite frontend running on port 5173.
