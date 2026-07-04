@@ -400,9 +400,78 @@
     margin: 0 auto;
 }
 
-/* Responsive */
-@media (max-width: 860px) {
+/* Checkout Responsiveness Overrides */
+@media (max-width: 768px) {
+    .checkout-layout {
+        margin: 20px auto;
+        padding: 0 15px;
+        gap: 20px;
+    }
+    
+    .checkout-stepper {
+        padding: 16px 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+    }
+    
+    .stepper-progress-line {
+        display: none; /* Hide progress bar connector line to make it wrap cleanly */
+    }
+    
+    .stepper-step {
+        padding: 0 6px;
+    }
+    
+    .step-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+    
+    .step-label {
+        font-size: 0.7rem;
+    }
+    
     .checkout-split-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .checkout-panel-card {
+        padding: 24px 20px;
+    }
+    
+    .checkout-form-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .payment-methods-selector {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .payment-card {
+        flex-direction: row;
+        gap: 16px;
+        padding: 14px 20px;
+    }
+    
+    .payment-card-icon {
+        font-size: 1.25rem !important;
+    }
+    
+    .checkout-actions-row {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+    
+    .checkout-back-link, 
+    .checkout-next-btn, 
+    .checkout-place-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 48px;
     }
 }

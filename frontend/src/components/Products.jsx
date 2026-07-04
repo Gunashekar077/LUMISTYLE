@@ -30,6 +30,7 @@ const Products = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
   const [sort, setSort] = useState("");
   const [priceRange, setPriceRange] = useState(80000);
   const [showOnlyWishlist, setShowOnlyWishlist] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Parse URL search params on mount or when location changes
   useEffect(() => {
@@ -124,10 +125,18 @@ const Products = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
         <p className="shop-sub-heading">Browse our luxury selection of fine accessories, gear, and apparel.</p>
       </div>
 
+      {/* Mobile Filter Toggle Button */}
+      <button 
+        className="mobile-filter-toggle-btn btn-ripple"
+        onClick={() => setShowMobileFilters(!showMobileFilters)}
+      >
+        <FaFilter style={{ marginRight: '8px' }} /> {showMobileFilters ? "Hide Filters" : "Show Filters"}
+      </button>
+
       <div className="shop-split-grid">
         
         {/* Left Side: Interactive Sidebar Filters */}
-        <aside className="shop-sidebar-filters glass-panel">
+        <aside className={`shop-sidebar-filters glass-panel ${showMobileFilters ? "mobile-open" : ""}`}>
           <div className="sidebar-filter-header">
             <h3><FaFilter /> Filters</h3>
             <button onClick={resetFilters} className="sidebar-reset-btn" title="Reset Filters">

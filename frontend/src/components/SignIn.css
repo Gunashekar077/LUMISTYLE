@@ -42,9 +42,9 @@
 }
 
 body.dark-mode .bg-mesh {
-  background: radial-gradient(circle at 15% 20%, rgba(236, 72, 153, 0.07) 0%, transparent 40%),
-              radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.07) 0%, transparent 40%),
-              #0B0F19;
+  background: radial-gradient(circle at 15% 20%, rgba(212, 175, 55, 0.07) 0%, transparent 40%),
+              radial-gradient(circle at 85% 85%, rgba(197, 168, 128, 0.07) 0%, transparent 40%),
+              var(--bg-main);
 }
 
 /* Floating Gradient Blobs */
@@ -279,7 +279,7 @@ body.dark-mode .bg-illustrations {
 }
 
 body.dark-mode .signin-card {
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(18, 18, 20, 0.45);
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35), 
               inset 0 1px 1px rgba(255, 255, 255, 0.06);

@@ -60,40 +60,18 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onClearCart }) =>
               <p className="item-price">₹{(item.price * 80).toLocaleString('en-IN')}</p>
               
               {/* Quantity selectors */}
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "4px" }}>
-                <span style={{ fontSize: "0.9rem", color: "var(--text-muted)" }}>Quantity:</span>
+              <div className="cart-quantity-selector">
+                <span className="quantity-label">Quantity:</span>
                 <button 
                   onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
-                  style={{
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    background: "rgba(255,255,255,0.05)",
-                    color: "#fff",
-                    cursor: "pointer",
-                    fontSize: "0.9rem",
-                    fontWeight: "600"
-                  }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = "rgba(255,255,255,0.12)"}
-                  onMouseOut={(e) => e.target.style.backgroundColor = "rgba(255,255,255,0.05)"}
+                  className="quantity-adjust-btn minus"
                 >
                   -
                 </button>
-                <span style={{ fontWeight: "700", minWidth: "24px", textAlign: "center" }}>{item.quantity}</span>
+                <span className="quantity-value">{item.quantity}</span>
                 <button 
                   onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                  style={{
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    background: "rgba(255,255,255,0.05)",
-                    color: "#fff",
-                    cursor: "pointer",
-                    fontSize: "0.9rem",
-                    fontWeight: "600"
-                  }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = "rgba(255,255,255,0.12)"}
-                  onMouseOut={(e) => e.target.style.backgroundColor = "rgba(255,255,255,0.05)"}
+                  className="quantity-adjust-btn plus"
                 >
                   +
                 </button>

@@ -326,11 +326,11 @@ const Header = ({
                     <strong>{currentUser?.name || "Guest User"}</strong>
                   </div>
                   <Link 
-                    to="/orders" 
+                    to="/profile" 
                     className="header-user-dropdown-link"
                     onClick={() => setShowProfileDropdown(false)}
                   >
-                    <FaReceipt /> My Orders
+                    <FaReceipt /> My Profile
                   </Link>
                   {currentUser?.role === 'admin' && (
                     <Link 
@@ -472,12 +472,41 @@ const Header = ({
 
       {/* Mobile Drawer Menu */}
       <div className={`mobile-nav-menu ${isMobileMenuOpen ? "open" : ""}`}>
+        <div className="mobile-nav-header">
+          <span className="mobile-menu-title">LUMISTYLE</span>
+          <button className="mobile-menu-close" onClick={() => setIsMobileMenuOpen(false)}>
+            <FaXmark />
+          </button>
+        </div>
+        {isAuthenticated && (
+          <div className="mobile-nav-user-info">
+            <span className="mobile-user-welcome">Signed in as</span>
+            <span className="mobile-user-name">{currentUser?.name || "Guest"}</span>
+          </div>
+        )}
         <div className="mobile-nav-links">
           <Link to="/home" onClick={handleLinkClick}>Home</Link>
-          <Link to="/products" onClick={handleLinkClick}>Shop</Link>
-          <Link to="/products?category=electronics" onClick={handleLinkClick}>Electronics</Link>
-          <Link to="/products?category=jewelery" onClick={handleLinkClick}>Jewelery</Link>
-          <Link to="/orders" onClick={handleLinkClick}>My Orders</Link>
+          <Link to="/products" onClick={handleLinkClick}>Shop Catalog</Link>
+          <Link to="/deals" onClick={handleLinkClick}>Special Deals</Link>
+          <Link to="/about" onClick={handleLinkClick}>About Brand</Link>
+          {isAuthenticated && (
+            <>
+              <Link to="/profile" onClick={handleLinkClick}>My Profile & Orders</Link>
+              {currentUser?.role === 'admin' && (
+                <Link to="/admin" onClick={handleLinkClick}>Admin Dashboard</Link>
+              )}
+              <div className="mobile-menu-divider"></div>
+              <button 
+                onClick={() => {
+                  onLogout();
+                  handleLinkClick();
+                }} 
+                className="mobile-menu-logout-btn"
+              >
+                Logout
+              </button>
+            </>
+          )}
         </div>
       </div>
 

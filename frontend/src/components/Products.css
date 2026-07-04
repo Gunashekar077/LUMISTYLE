@@ -360,6 +360,11 @@
     cursor: pointer;
 }
 
+/* Mobile filter toggle styles */
+.mobile-filter-toggle-btn {
+    display: none;
+}
+
 /* Responsiveness */
 @media (max-width: 992px) {
     .shop-layout-container {
@@ -367,21 +372,55 @@
         overflow: visible;
     }
 
+    .mobile-filter-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px;
+        background-color: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: var(--text-main);
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        margin-bottom: 16px;
+        transition: var(--transition-quick);
+    }
+    
+    .mobile-filter-toggle-btn:hover {
+        background-color: rgba(212, 175, 55, 0.08);
+        border-color: var(--accent-purple);
+    }
+
     .shop-split-grid {
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 0;
         height: auto;
         overflow: visible;
     }
     
     .shop-sidebar-filters {
+        display: none; /* hidden by default on mobile */
         position: static;
         width: 100%;
         height: auto;
         overflow-y: visible;
         border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 30px;
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .shop-sidebar-filters.mobile-open {
+        display: flex;
+        background-color: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: var(--card-shadow);
+        animation: fadeIn 0.25s ease-out;
     }
 
     .shop-products-column {
@@ -389,4 +428,9 @@
         overflow-y: visible;
         padding-right: 0;
     }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
 }

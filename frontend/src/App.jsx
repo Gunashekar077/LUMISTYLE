@@ -13,6 +13,7 @@ import SignIn from "./components/SignIn";
 import CartDrawer from "./components/CartDrawer";
 import Deals from "./components/Deals";
 import About from "./components/About";
+import Profile from "./components/Profile";
 import { authService, cartService } from "./services/api";
 import { OrderProvider } from "./context/OrderContext";
 import { PulseLoader } from "react-spinners";
@@ -150,6 +151,17 @@ const App = () => {
     if (token) {
       try {
         const user = await authService.getProfile();
+        // Merge with local storage profile updates if they exist
+        const localOverride = localStorage.getItem("user_profile_override");
+        if (localOverride) {
+          try {
+            const parsed = JSON.parse(localOverride);
+            user.name = parsed.name || user.name;
+            user.email = parsed.email || user.email;
+          } catch(e) {
+            console.error("Error loading local override profile", e);
+          }
+        }
         setCurrentUser(user);
         setIsAuthenticated(true);
         // Sync cart after profile is loaded
@@ -164,6 +176,17 @@ const App = () => {
     } else {
       setIsLoadingProfile(false);
     }
+  };
+
+  const handleUpdateProfile = (updatedData) => {
+    setCurrentUser(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        name: updatedData.name || prev.name,
+        email: updatedData.email || prev.email
+      };
+    });
   };
 
   useEffect(() => {
@@ -334,7 +357,7 @@ const App = () => {
           fontFamily: "'Poppins', sans-serif",
           fontSize: "3rem",
           fontWeight: "800",
-          background: "linear-gradient(135deg, #ec4899 0%, #06b6d4 100%)",
+          background: "linear-gradient(135deg, #d4af37 0%, #aa7c11 100%)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           letterSpacing: "-1.5px",
@@ -342,7 +365,7 @@ const App = () => {
         }}>
           LUMISTYLE
         </h1>
-        <PulseLoader color="#ec4899" size={12} margin={4} />
+        <PulseLoader color="#d4af37" size={12} margin={4} />
       </div>
     );
   }
@@ -486,7 +509,15 @@ const App = () => {
             path="/orders"
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Orders />
+                <Navigate to="/profile" replace />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Profile currentUser={currentUser} onUpdateProfile={handleUpdateProfile} />
               </ProtectedRoute>
             }
           />

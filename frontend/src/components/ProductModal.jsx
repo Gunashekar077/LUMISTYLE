@@ -9,6 +9,30 @@ const ProductModal = ({ product, onClose, onAddToCart }) => {
   const [selectedColor, setSelectedColor] = useState("Royal Blue");
   const [selectedSize, setSelectedSize] = useState("M");
 
+  // Reviews States
+  const [reviews, setReviews] = useState([
+    { name: "Aarav Sharma", rating: 5, comment: "Absolutely stunning quality. The materials feel premium and durable.", date: "2 days ago" },
+    { name: "Mira Patel", rating: 4, comment: "Exquisite design. Fits perfectly and looks very elegant.", date: "1 week ago" }
+  ]);
+  const [newReviewName, setNewReviewName] = useState("");
+  const [newReviewRating, setNewReviewRating] = useState(5);
+  const [newReviewComment, setNewReviewComment] = useState("");
+
+  const handleAddReview = (e) => {
+    e.preventDefault();
+    if (newReviewName.trim() && newReviewComment.trim()) {
+      setReviews([{
+        name: newReviewName,
+        rating: newReviewRating,
+        comment: newReviewComment,
+        date: "Just now"
+      }, ...reviews]);
+      setNewReviewName("");
+      setNewReviewComment("");
+      setNewReviewRating(5);
+    }
+  };
+
   const colors = [
     { name: "Royal Blue", hex: "#2563EB" },
     { name: "Luxury Purple", hex: "#8B5CF6" },
@@ -89,6 +113,69 @@ const ProductModal = ({ product, onClose, onAddToCart }) => {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Reviews Section */}
+          <div className="modal-reviews-section">
+            <h4 className="reviews-section-title">Customer Reviews</h4>
+            
+            <div className="reviews-list">
+              {reviews.map((rev, idx) => (
+                <div key={idx} className="review-card">
+                  <div className="review-card-header">
+                    <span className="review-author">{rev.name}</span>
+                    <span className="review-date">{rev.date}</span>
+                  </div>
+                  <div className="review-rating-row">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        style={{
+                          color: i < rev.rating ? "#fbbf24" : "var(--border-color)",
+                          fontSize: "0.8rem",
+                          marginRight: "1px"
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <p className="review-comment">{rev.comment}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Write a review form */}
+            <form onSubmit={handleAddReview} className="write-review-form">
+              <h5>Write a Review</h5>
+              <div className="review-form-group">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={newReviewName}
+                  onChange={(e) => setNewReviewName(e.target.value)}
+                  required
+                />
+                <select
+                  value={newReviewRating}
+                  onChange={(e) => setNewReviewRating(Number(e.target.value))}
+                >
+                  <option value="5">5 Stars</option>
+                  <option value="4">4 Stars</option>
+                  <option value="3">3 Stars</option>
+                  <option value="2">2 Stars</option>
+                  <option value="1">1 Star</option>
+                </select>
+              </div>
+              <textarea
+                placeholder="Share your experience with this item..."
+                value={newReviewComment}
+                onChange={(e) => setNewReviewComment(e.target.value)}
+                required
+                rows="2"
+              ></textarea>
+              <button type="submit" className="submit-review-btn btn-ripple">
+                Submit Review
+              </button>
+            </form>
           </div>
 
           {/* Footer: Price and Add To Cart */}

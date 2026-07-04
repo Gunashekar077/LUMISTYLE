@@ -1090,3 +1090,128 @@ body:not(.dark-mode) .chatbot-input {
         bottom: 20px;
     }
 }
+
+/* Quantity Selector Styles */
+.cart-quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.quantity-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.quantity-adjust-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-quick);
+}
+
+.quantity-adjust-btn:hover {
+    background-color: rgba(212, 175, 55, 0.08);
+    border-color: var(--accent-purple);
+}
+
+.quantity-value {
+    font-weight: 700;
+    min-width: 24px;
+    text-align: center;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+/* Touch Target & Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .quantity-adjust-btn {
+        width: 44px;
+        height: 44px;
+    }
+    /* Touch Target Optimization (min 44px) */
+    button, 
+    .cta-button, 
+    .checkout-btn, 
+    .remove-btn,
+    .header-action-btn,
+    .chatbot-float-btn,
+    .back-to-top,
+    .chatbot-input-row button,
+    .chat-suggestion-chip {
+        min-height: 44px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    
+    .back-to-top {
+        bottom: 80px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+    }
+    
+    /* Layout & Scroll Fixes */
+    .cart-container {
+        padding: 24px 15px;
+        min-height: auto;
+    }
+    
+    .cart-items {
+        gap: 15px;
+    }
+    
+    .cart-item {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+        gap: 16px;
+        text-align: center;
+        background-color: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--card-shadow);
+    }
+    
+    .cart-item > img {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto;
+    }
+    
+    .cart-item-details {
+        text-align: center;
+        align-items: center;
+    }
+    
+    .remove-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
+    }
+    
+    .cart-summary {
+        padding: 24px 16px;
+        text-align: center;
+        background-color: var(--bg-surface);
+        border: 1px solid var(--border-color);
+    }
+    
+    .cart-summary h3 {
+        font-size: 1.25rem;
+    }
+    
+    .checkout-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
