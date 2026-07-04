@@ -137,6 +137,34 @@ const SignIn = ({ setIsAuthenticated }) => {
     setApiError(null);
   };
 
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    setApiError(null);
+    try {
+      // Simulate Google login delay for natural experience
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Under the hood, login using default test user credentials
+      const data = await authService.login('user@lumistyle.com', 'user123');
+      
+      setIsLoading(false);
+      setIsSuccess(true);
+      
+      localStorage.setItem("isAuthenticated", "true");
+      if (setIsAuthenticated) {
+        setIsAuthenticated(true);
+      }
+      
+      setTimeout(() => {
+        navigate("/home");
+      }, 1500);
+    } catch (err) {
+      setIsLoading(false);
+      setApiError("Google Sign-In failed. Please try again.");
+      console.error('Google Auth Error:', err);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -585,7 +613,13 @@ const SignIn = ({ setIsAuthenticated }) => {
 
             {/* Social Logins Buttons */}
             <div className="social-buttons-grid">
-              <button className="social-btn" title="Sign In with Google">
+              <button 
+                type="button" 
+                className="social-btn" 
+                title="Sign In with Google"
+                onClick={handleGoogleSignIn}
+                disabled={isLoading}
+              >
                 <FaGoogle />
               </button>
               <button className="social-btn" title="Sign In with Apple">
