@@ -99,12 +99,13 @@ const generateId = () => Math.random().toString(36).substring(2, 9);
 
 // Initialize data store with default users
 const initializeUsers = async () => {
-  if (users.length === 0) {
+  const hasRebrandedUser = users.some(u => u.email.toLowerCase() === 'user@lumistyle.com');
+  if (!hasRebrandedUser) {
     const adminPassword = await bcrypt.hash('admin123', 10);
     const userPassword = await bcrypt.hash('user123', 10);
     
     const adminUser = {
-      id: 'admin_user_id',
+      id: 'admin_user_id_lumi',
       name: 'Admin User',
       email: 'admin@lumistyle.com',
       password: adminPassword,
@@ -112,22 +113,33 @@ const initializeUsers = async () => {
     };
     
     const testUser = {
-      id: 'test_user_id',
+      id: 'test_user_id_lumi',
       name: 'Test User',
       email: 'user@lumistyle.com',
       password: userPassword,
       role: 'user'
     };
 
-    // Update memory
-    users.push(adminUser);
+    // Stage in memory if not already present
+    if (!users.some(u => u.email.toLowerCase() === 'admin@lumistyle.com')) {
+      users.push(adminUser);
+    }
     users.push(testUser);
 
-    // Update DB
-    await User.create(adminUser);
-    await User.create(testUser);
+    // Update DB if connected
+    if (mongoose.connection.readyState === 1) {
+      try {
+        const adminExists = await User.findOne({ email: 'admin@lumistyle.com' });
+        if (!adminExists) await User.create(adminUser);
+        
+        const testExists = await User.findOne({ email: 'user@lumistyle.com' });
+        if (!testExists) await User.create(testUser);
+      } catch (err) {
+        console.error('Error seeding rebranded users in MongoDB:', err);
+      }
+    }
     
-    console.log('In-memory users and MongoDB user database initialized successfully.');
+    console.log('In-memory users and MongoDB user database initialized successfully with rebranded user.');
   }
 };
 
