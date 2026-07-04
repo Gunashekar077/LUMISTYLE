@@ -106,7 +106,7 @@ const initializeUsers = async () => {
     const adminUser = {
       id: 'admin_user_id',
       name: 'Admin User',
-      email: 'admin@urbancart.com',
+      email: 'admin@lumistyle.com',
       password: adminPassword,
       role: 'admin'
     };
@@ -114,7 +114,7 @@ const initializeUsers = async () => {
     const testUser = {
       id: 'test_user_id',
       name: 'Test User',
-      email: 'user@urbancart.com',
+      email: 'user@lumistyle.com',
       password: userPassword,
       role: 'user'
     };

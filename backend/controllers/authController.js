@@ -5,7 +5,7 @@ import { getUserByEmail, createUser, getUserById, users, updateUserPassword } fr
 
 // Helper to generate JWT
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'urbancartsecretkey9876543210', {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'lumistylesecretkey9876543210', {
     expiresIn: '30d',
   });
 };
@@ -27,9 +27,9 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Determine role (e.g. admin if email contains admin@urbancart.com or has a query parameter for dev/seed purposes)
+    // Determine role (e.g. admin if email contains admin@lumistyle.com or has a query parameter for dev/seed purposes)
     let role = 'user';
-    if (email.toLowerCase().endsWith('@urbancart.admin') || email.toLowerCase() === 'admin@urbancart.com') {
+    if (email.toLowerCase().endsWith('@lumistyle.admin') || email.toLowerCase() === 'admin@lumistyle.com' || email.toLowerCase().endsWith('@urbancart.admin') || email.toLowerCase() === 'admin@urbancart.com') {
       role = 'admin';
     }
 

@@ -13,7 +13,7 @@ export const OrderProvider = ({ children }) => {
 
   // Load orders from localStorage as initial fallback, then fetch from API
   useEffect(() => {
-    const cachedOrders = localStorage.getItem('urbancart_orders');
+    const cachedOrders = localStorage.getItem('lumistyle_orders');
     if (cachedOrders) {
       try {
         setOrders(JSON.parse(cachedOrders));
@@ -29,7 +29,7 @@ export const OrderProvider = ({ children }) => {
     try {
       const data = await orderService.getOrders();
       setOrders(data);
-      localStorage.setItem('urbancart_orders', JSON.stringify(data));
+      localStorage.setItem('lumistyle_orders', JSON.stringify(data));
     } catch (err) {
       console.error('Failed to fetch orders:', err);
       setError(err.response?.data?.message || 'Failed to retrieve order history.');
@@ -59,7 +59,7 @@ export const OrderProvider = ({ children }) => {
       const updatedOrders = [newOrder, ...orders];
       setOrders(updatedOrders);
       setCurrentOrder(newOrder);
-      localStorage.setItem('urbancart_orders', JSON.stringify(updatedOrders));
+      localStorage.setItem('lumistyle_orders', JSON.stringify(updatedOrders));
       
       setIsLoading(false);
       return newOrder;

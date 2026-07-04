@@ -10,7 +10,7 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
       
       // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'urbancartsecretkey9876543210');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'lumistylesecretkey9876543210');
       
       // Get user from the data store
       const user = getUserById(decoded.id);

@@ -197,7 +197,7 @@ const seedProducts = async () => {
 
 // Base route
 app.get('/', (req, res) => {
-  res.json({ message: 'UrbanCart E-Commerce API is running smoothly!' });
+  res.json({ message: 'LUMISTYLE E-Commerce API is running smoothly!' });
 });
 
 // Mount Routes

@@ -1,6 +1,6 @@
 # LUMISTYLE Monorepo
 
-This repository contains both the frontend React application and the backend API server for UrbanCart.
+This repository contains both the frontend React application and the backend API server for LUMISTYLE.
 
 ## Setup and Running Locally
 

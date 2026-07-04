@@ -1,7 +1,7 @@
 {
-  "name": "urbancart-backend",
+  "name": "lumistyle-backend",
   "version": "1.0.0",
-  "description": "In-memory backend for UrbanCart e-commerce",
+  "description": "In-memory backend for LUMISTYLE e-commerce",
   "main": "server.js",
   "type": "module",
   "scripts": {
