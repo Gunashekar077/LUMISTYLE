@@ -1,6 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash, FaCheck } from "react-icons/fa6";
+import { 
+  FaEye, 
+  FaEyeSlash, 
+  FaCheck, 
+  FaUser, 
+  FaEnvelope, 
+  FaLock, 
+  FaGoogle, 
+  FaApple, 
+  FaFacebookF, 
+  FaArrowLeft,
+  FaSun,
+  FaMoon
+} from "react-icons/fa6";
 import { authService } from "../services/api";
 import "./SignIn.css";
 
@@ -14,6 +27,7 @@ const SignIn = ({ setIsAuthenticated }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   
   // Error and UI state
   const [errors, setErrors] = useState({});
@@ -21,6 +35,12 @@ const SignIn = ({ setIsAuthenticated }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState(null);
+
+  // Theme Sync inside Sign In
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
+  
+  // Mouse Parallax Offset
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   // Forgot Password state
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -31,10 +51,54 @@ const SignIn = ({ setIsAuthenticated }) => {
   const [devCodeMessage, setDevCodeMessage] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
 
+  // Sync theme
+  useEffect(() => {
+    if (theme === "dark") {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  // Track Mouse movement for parallax effect
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const x = (e.clientX - window.innerWidth / 2) / 40;
+      const y = (e.clientY - window.innerHeight / 2) / 40;
+      setMousePos({ x, y });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === "light" ? "dark" : "light");
+  };
+
+  const getPasswordStrength = (pwd) => {
+    if (!pwd) return 0;
+    let score = 0;
+    if (pwd.length >= 6) score += 1;
+    if (/[A-Z]/.test(pwd)) score += 1;
+    if (/[0-9]/.test(pwd)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) score += 1;
+    return score;
+  };
+  const strengthScore = getPasswordStrength(password);
+  const getStrengthLabel = (score) => {
+    if (score === 0) return { label: "", color: "transparent" };
+    if (score === 1) return { label: "Weak", color: "#ef4444" };
+    if (score === 2) return { label: "Fair", color: "#eab308" };
+    if (score === 3) return { label: "Good", color: "#3b82f6" };
+    return { label: "Strong", color: "#10b981" };
+  };
+  const strengthDetails = getStrengthLabel(strengthScore);
+
   const validate = () => {
     const newErrors = {};
     
-    // Name validation (only if registering)
+    // Name validation
     if (isRegistering && !name.trim()) {
       newErrors.name = "Name is required";
     }
@@ -62,7 +126,7 @@ const SignIn = ({ setIsAuthenticated }) => {
     if (field === "email") setEmail(value);
     if (field === "password") setPassword(value);
     
-    // Clear errors as user types
+    // Clear errors
     if (errors[field]) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -96,7 +160,6 @@ const SignIn = ({ setIsAuthenticated }) => {
         setIsAuthenticated(true);
       }
       
-      // Auto-navigate to home page after showing success animation
       setTimeout(() => {
         navigate("/home");
       }, 1500);
@@ -164,7 +227,6 @@ const SignIn = ({ setIsAuthenticated }) => {
       setIsLoading(false);
       setIsSuccess(true);
       
-      // Navigate back to sign in mode after showing success
       setTimeout(() => {
         setIsSuccess(false);
         setIsForgotPassword(false);
@@ -205,7 +267,52 @@ const SignIn = ({ setIsAuthenticated }) => {
 
   return (
     <div className="signin-container">
-      <div className="signin-card">
+      {/* Premium Luxury Background elements */}
+      <div className="signin-background">
+        <div className="bg-mesh" style={{ transform: `translate3d(${mousePos.x * 0.5}px, ${mousePos.y * 0.5}px, 0)` }}></div>
+        <div className="bg-blob blob-1" style={{ transform: `translate3d(${mousePos.x * 0.8}px, ${mousePos.y * 0.8}px, 0)` }}></div>
+        <div className="bg-blob blob-2" style={{ transform: `translate3d(${mousePos.x * -0.6}px, ${mousePos.y * -0.6}px, 0)` }}></div>
+        <div className="bg-blob blob-3" style={{ transform: `translate3d(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px, 0)` }}></div>
+        
+        {/* Transparent Geometric Shapes */}
+        <div className="bg-shapes" style={{ transform: `translate3d(${mousePos.x * -0.3}px, ${mousePos.y * -0.3}px, 0)` }}>
+          <div className="bg-shape shape-circle"></div>
+          <div className="bg-shape shape-square"></div>
+          <div className="bg-shape shape-triangle"></div>
+        </div>
+
+        {/* Low-Opacity SVGs for Luxury Fashion Items */}
+        <div className="bg-illustrations" style={{ transform: `translate3d(${mousePos.x * 0.2}px, ${mousePos.y * 0.2}px, 0)` }}>
+          <svg className="f-ill ill-hanger" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+            <path d="M12 2a3 3 0 0 0-3 3h6a3 3 0 0 0-3-3zm0 3v2M2 17h20L12 7 2 17zM12 17v4" />
+          </svg>
+          <svg className="f-ill ill-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6zM3 6h18M16 10a4 4 0 0 1-8 0" />
+          </svg>
+          <svg className="f-ill ill-sneaker" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+            <path d="M3 12h3l3-4h4l3 4h5M3 12v6h18v-6" />
+          </svg>
+          <svg className="f-ill ill-perfume" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+            <path d="M8 8h8v12H8zM10 8V5h4v3M12 5h.01" />
+          </svg>
+        </div>
+
+        {/* Animated Particles */}
+        <div className="bg-particles">
+          {[...Array(10)].map((_, i) => (
+            <div key={i} className={`bg-particle particle-${i+1}`} style={{ transform: `translate3d(${mousePos.x * (i % 2 === 0 ? 0.3 : -0.3)}px, ${mousePos.y * (i % 2 === 0 ? -0.3 : 0.3)}px, 0)` }}></div>
+          ))}
+        </div>
+      </div>
+
+
+      {/* Frost glass sign in card */}
+      <div 
+        className="signin-card" 
+        style={{ 
+          transform: `translate3d(${mousePos.x * 0.15}px, ${mousePos.y * 0.15}px, 0) rotateX(${-mousePos.y * 0.08}deg) rotateY(${mousePos.x * 0.08}deg)` 
+        }}
+      >
         {isSuccess ? (
           <div className="success-checkmark">
             <div className="checkmark-circle">
@@ -227,6 +334,7 @@ const SignIn = ({ setIsAuthenticated }) => {
         ) : isForgotPassword ? (
           <>
             <div className="signin-header">
+              <span className="brand-subtitle">THE ART OF COUTURE</span>
               <h2>{resetStep === 1 ? "Reset Password" : "New Credentials"}</h2>
               <p>
                 {resetStep === 1 
@@ -235,42 +343,15 @@ const SignIn = ({ setIsAuthenticated }) => {
               </p>
             </div>
 
-            {apiError && (
-              <div className="error-alert" style={{
-                backgroundColor: 'rgba(239, 68, 68, 0.15)',
-                color: '#ef4444',
-                padding: '12px',
-                borderRadius: '8px',
-                marginBottom: '16px',
-                fontSize: '0.9rem',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                textAlign: 'center'
-              }}>
-                {apiError}
-              </div>
-            )}
-
-            {devCodeMessage && (
-              <div className="dev-alert" style={{
-                backgroundColor: 'rgba(99, 102, 241, 0.15)',
-                color: '#818cf8',
-                padding: '12px',
-                borderRadius: '8px',
-                marginBottom: '16px',
-                fontSize: '0.9rem',
-                border: '1px solid rgba(99, 102, 241, 0.25)',
-                textAlign: 'center',
-                fontWeight: '600'
-              }}>
-                {devCodeMessage}
-              </div>
-            )}
+            {apiError && <div className="error-alert">{apiError}</div>}
+            {devCodeMessage && <div className="dev-alert">{devCodeMessage}</div>}
 
             {resetStep === 1 ? (
               <form onSubmit={handleRequestCode} className="signin-form" noValidate>
                 <div className="form-group">
                   <label htmlFor="reset-email">Email Address</label>
                   <div className="input-wrapper">
+                    <FaEnvelope className="input-icon" />
                     <input
                       type="email"
                       id="reset-email"
@@ -284,12 +365,7 @@ const SignIn = ({ setIsAuthenticated }) => {
                   {errors.email && <span className="error-text">{errors.email}</span>}
                 </div>
 
-                <button
-                  type="submit"
-                  className="signin-submit-btn"
-                  disabled={isLoading}
-                  style={{ marginTop: '10px' }}
-                >
+                <button type="submit" className="signin-submit-btn" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <div className="btn-spinner"></div>
@@ -305,6 +381,7 @@ const SignIn = ({ setIsAuthenticated }) => {
                 <div className="form-group">
                   <label htmlFor="reset-code">Verification Code</label>
                   <div className="input-wrapper">
+                    <FaCheck className="input-icon" />
                     <input
                       type="text"
                       id="reset-code"
@@ -325,6 +402,7 @@ const SignIn = ({ setIsAuthenticated }) => {
                 <div className="form-group">
                   <label htmlFor="new-password">New Password</label>
                   <div className="input-wrapper">
+                    <FaLock className="input-icon" />
                     <input
                       type={showNewPassword ? "text" : "password"}
                       id="new-password"
@@ -348,17 +426,10 @@ const SignIn = ({ setIsAuthenticated }) => {
                       {showNewPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
                   </div>
-                  {errors.newPassword && (
-                    <span className="error-text">{errors.newPassword}</span>
-                  )}
+                  {errors.newPassword && <span className="error-text">{errors.newPassword}</span>}
                 </div>
 
-                <button
-                  type="submit"
-                  className="signin-submit-btn"
-                  disabled={isLoading}
-                  style={{ marginTop: '10px' }}
-                >
+                <button type="submit" className="signin-submit-btn" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <div className="btn-spinner"></div>
@@ -371,50 +442,28 @@ const SignIn = ({ setIsAuthenticated }) => {
               </form>
             )}
 
-            <div className="signup-prompt" style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem', color: '#94a3b8' }}>
-              <button 
-                onClick={toggleForgotPassword} 
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: '#6366f1', 
-                  cursor: 'pointer', 
-                  fontWeight: '600',
-                  padding: 0,
-                  fontSize: '0.9rem'
-                }}
-              >
-                Back to Sign In
+            <div className="signup-prompt">
+              <button onClick={toggleForgotPassword} className="prompt-action-btn">
+                <FaArrowLeft style={{ marginRight: '6px', fontSize: '0.8rem' }} /> Back to Sign In
               </button>
             </div>
           </>
         ) : (
           <>
             <div className="signin-header">
+              <span className="brand-subtitle">THE ART OF COUTURE</span>
               <h2>{isRegistering ? "Create Account" : "Welcome Back"}</h2>
-              <p>{isRegistering ? "Join UrbanCart today" : "Sign in to continue to UrbanCart"}</p>
+              <p>{isRegistering ? "Join the inner fashion circle today" : "Sign in to access your luxury wardrobe"}</p>
             </div>
 
-            {apiError && (
-              <div className="error-alert" style={{
-                backgroundColor: 'rgba(239, 68, 68, 0.15)',
-                color: '#ef4444',
-                padding: '12px',
-                borderRadius: '8px',
-                marginBottom: '16px',
-                fontSize: '0.9rem',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                textAlign: 'center'
-              }}>
-                {apiError}
-              </div>
-            )}
+            {apiError && <div className="error-alert">{apiError}</div>}
 
             <form onSubmit={handleSubmit} className="signin-form" noValidate>
               {isRegistering && (
                 <div className="form-group">
                   <label htmlFor="name">Full Name</label>
                   <div className="input-wrapper">
+                    <FaUser className="input-icon" />
                     <input
                       type="text"
                       id="name"
@@ -432,6 +481,7 @@ const SignIn = ({ setIsAuthenticated }) => {
               <div className="form-group">
                 <label htmlFor="email">Email Address</label>
                 <div className="input-wrapper">
+                  <FaEnvelope className="input-icon" />
                   <input
                     type="email"
                     id="email"
@@ -448,6 +498,7 @@ const SignIn = ({ setIsAuthenticated }) => {
               <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <div className="input-wrapper">
+                  <FaLock className="input-icon" />
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
@@ -467,13 +518,41 @@ const SignIn = ({ setIsAuthenticated }) => {
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
                 </div>
-                {errors.password && (
-                  <span className="error-text">{errors.password}</span>
+                {errors.password && <span className="error-text">{errors.password}</span>}
+
+                {/* Password Strength Indicator (Sign Up Only) */}
+                {isRegistering && password && (
+                  <div className="strength-indicator-wrapper">
+                    <div className="strength-bars">
+                      {[...Array(4)].map((_, i) => (
+                        <div 
+                          key={i} 
+                          className="strength-bar" 
+                          style={{ 
+                            backgroundColor: i < strengthScore ? strengthDetails.color : "rgba(255,255,255,0.08)"
+                          }}
+                        ></div>
+                      ))}
+                    </div>
+                    {strengthDetails.label && (
+                      <span className="strength-label" style={{ color: strengthDetails.color }}>
+                        {strengthDetails.label}
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
 
               {!isRegistering && (
-                <div className="form-options" style={{ justifyContent: 'flex-end', marginTop: '-10px' }}>
+                <div className="form-options">
+                  <label className="remember-me">
+                    <input 
+                      type="checkbox" 
+                      checked={rememberMe} 
+                      onChange={(e) => setRememberMe(e.target.checked)} 
+                    />
+                    <span>Remember me</span>
+                  </label>
                   <a
                     href="#forgot"
                     className="forgot-password"
@@ -487,37 +566,39 @@ const SignIn = ({ setIsAuthenticated }) => {
                 </div>
               )}
 
-              <button
-                type="submit"
-                className="signin-submit-btn"
-                disabled={isLoading}
-                style={{ marginTop: '10px' }}
-              >
+              <button type="submit" className="signin-submit-btn" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <div className="btn-spinner"></div>
-                    {isRegistering ? "Registering..." : "Signing in..."}
+                    {isRegistering ? "Creating Account..." : "Signing in..."}
                   </>
                 ) : (
-                  isRegistering ? "Register" : "Sign In"
+                  isRegistering ? "Create Account" : "Sign In"
                 )}
               </button>
             </form>
 
-            <div className="signup-prompt" style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem', color: '#94a3b8' }}>
+            {/* Social Logins Divider */}
+            <div className="social-divider">
+              <span>or continue with</span>
+            </div>
+
+            {/* Social Logins Buttons */}
+            <div className="social-buttons-grid">
+              <button className="social-btn" title="Sign In with Google">
+                <FaGoogle />
+              </button>
+              <button className="social-btn" title="Sign In with Apple">
+                <FaApple />
+              </button>
+              <button className="social-btn" title="Sign In with Facebook">
+                <FaFacebookF />
+              </button>
+            </div>
+
+            <div className="signup-prompt">
               {isRegistering ? "Already have an account?" : "Don't have an account?"}{" "}
-              <button 
-                onClick={toggleMode} 
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: '#6366f1', 
-                  cursor: 'pointer', 
-                  fontWeight: '600',
-                  padding: 0,
-                  fontSize: '0.9rem'
-                }}
-              >
+              <button onClick={toggleMode} className="prompt-action-btn font-semibold">
                 {isRegistering ? "Sign In" : "Sign Up"}
               </button>
             </div>

@@ -115,11 +115,11 @@ const Orders = () => {
                     <div className="order-item-info">
                       <p className="order-item-title">{item.title}</p>
                       <p className="order-item-subtitle">
-                        Quantity: {item.quantity} &times; ${item.price.toFixed(2)}
+                        Quantity: {item.quantity} &times; ₹{(item.price * 80).toLocaleString('en-IN')}
                       </p>
                     </div>
                     <div className="order-item-subtotal">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ₹{(item.price * item.quantity * 80).toLocaleString('en-IN')}
                     </div>
                   </div>
                 ))}
@@ -155,31 +155,31 @@ const Orders = () => {
                     <>
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: 'var(--text-muted)' }}>Subtotal:</span>
-                        <span>${(order.subtotal || 0).toFixed(2)}</span>
+                        <span>₹{((order.subtotal || 0) * 80).toLocaleString('en-IN')}</span>
                       </div>
                       
                       {order.discount > 0 && (
                         <div style={{ display: 'flex', justifyContent: 'space-between', color: '#10b981' }}>
                           <span>Discount:</span>
-                          <span>-${(order.discount || 0).toFixed(2)}</span>
+                          <span>-₹{(order.discount * 80).toLocaleString('en-IN')}</span>
                         </div>
                       )}
 
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: 'var(--text-muted)' }}>Shipping:</span>
-                        <span>{order.shippingFee === 0 ? 'FREE' : `$${(order.shippingFee || 0).toFixed(2)}`}</span>
+                        <span>{order.shippingFee === 0 ? 'FREE' : `₹${((order.shippingFee || 0) * 80).toLocaleString('en-IN')}`}</span>
                       </div>
 
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: 'var(--text-muted)' }}>Tax (8%):</span>
-                        <span>${(order.tax || 0).toFixed(2)}</span>
+                        <span>₹{((order.tax || 0) * 80).toLocaleString('en-IN')}</span>
                       </div>
                     </>
                   )}
 
                   <div className="order-footer-right-total">
                     <span>Grand Total:</span>
-                    <span className="order-footer-right-total-val">${order.totalAmount.toFixed(2)}</span>
+                    <span className="order-footer-right-total-val">₹{(order.totalAmount * 80).toLocaleString('en-IN')}</span>
                   </div>
                 </div>
 

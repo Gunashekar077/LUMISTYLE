@@ -1,69 +1,65 @@
 import bcrypt from 'bcryptjs';
-import { Sequelize, DataTypes } from 'sequelize';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-// Get current directory for SQLite storage path
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const dbPath = path.join(__dirname, '..', 'database.sqlite');
+dotenv.config();
 
-// Initialize Sequelize with SQLite dialect
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: dbPath,
-  logging: false, // Set to console.log to debug SQL queries if needed
+// Define Schemas
+const userSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, default: 'user' }
 });
 
-// Define Models
-const DBUser = sequelize.define('User', {
-  id: { type: DataTypes.STRING, primaryKey: true },
-  name: { type: DataTypes.STRING, allowNull: false },
-  email: { type: DataTypes.STRING, allowNull: false, unique: true },
-  password: { type: DataTypes.STRING, allowNull: false },
-  role: { type: DataTypes.STRING, defaultValue: 'user' }
+const productSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  title: { type: String, required: true },
+  description: { type: String },
+  price: { type: Number, required: true },
+  category: { type: String },
+  image: { type: String },
+  stock: { type: Number, default: 50 },
+  ratingRate: { type: Number, default: 4.5 },
+  ratingCount: { type: Number, default: 10 }
 });
 
-const DBProduct = sequelize.define('Product', {
-  id: { type: DataTypes.STRING, primaryKey: true },
-  title: { type: DataTypes.STRING, allowNull: false },
-  description: { type: DataTypes.TEXT },
-  price: { type: DataTypes.FLOAT, allowNull: false },
-  category: { type: DataTypes.STRING },
-  image: { type: DataTypes.STRING },
-  stock: { type: DataTypes.INTEGER, defaultValue: 50 },
-  ratingRate: { type: DataTypes.FLOAT, defaultValue: 4.5 },
-  ratingCount: { type: DataTypes.INTEGER, defaultValue: 10 }
+const cartItemSchema = new mongoose.Schema({
+  userId: { type: String, required: true },
+  productId: { type: String, required: true },
+  quantity: { type: Number, default: 1 }
+});
+cartItemSchema.index({ userId: 1, productId: 1 });
+
+const orderItemSchema = new mongoose.Schema({
+  productId: { type: String, required: true },
+  title: { type: String, required: true },
+  price: { type: Number, required: true },
+  quantity: { type: Number, default: 1 },
+  image: { type: String }
 });
 
-const DBCartItem = sequelize.define('CartItem', {
-  userId: { type: DataTypes.STRING, allowNull: false },
-  productId: { type: DataTypes.STRING, allowNull: false },
-  quantity: { type: DataTypes.INTEGER, defaultValue: 1 }
+const orderSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  userId: { type: String, required: true },
+  products: [orderItemSchema],
+  subtotal: { type: Number, required: true },
+  shippingFee: { type: Number, default: 0 },
+  tax: { type: Number, default: 0 },
+  discount: { type: Number, default: 0 },
+  totalAmount: { type: Number, required: true },
+  shippingDetails: { type: mongoose.Schema.Types.Mixed },
+  paymentMethod: { type: String, default: 'cod' },
+  orderStatus: { type: String, default: 'Processing' },
+  createdAt: { type: String }
 });
 
-const DBOrder = sequelize.define('Order', {
-  id: { type: DataTypes.STRING, primaryKey: true },
-  userId: { type: DataTypes.STRING, allowNull: false },
-  subtotal: { type: DataTypes.FLOAT, allowNull: false },
-  shippingFee: { type: DataTypes.FLOAT, defaultValue: 0 },
-  tax: { type: DataTypes.FLOAT, defaultValue: 0 },
-  discount: { type: DataTypes.FLOAT, defaultValue: 0 },
-  totalAmount: { type: DataTypes.FLOAT, allowNull: false },
-  shippingDetails: { type: DataTypes.TEXT }, // JSON stringified
-  paymentMethod: { type: DataTypes.STRING, defaultValue: 'cod' },
-  orderStatus: { type: DataTypes.STRING, defaultValue: 'Processing' },
-  createdAt: { type: DataTypes.STRING }
-});
-
-const DBOrderItem = sequelize.define('OrderItem', {
-  orderId: { type: DataTypes.STRING, allowNull: false },
-  productId: { type: DataTypes.STRING, allowNull: false },
-  title: { type: DataTypes.STRING, allowNull: false },
-  price: { type: DataTypes.FLOAT, allowNull: false },
-  quantity: { type: DataTypes.INTEGER, defaultValue: 1 },
-  image: { type: DataTypes.STRING }
-});
+// Compile Models
+const User = mongoose.model('User', userSchema);
+const Product = mongoose.model('Product', productSchema);
+const CartItem = mongoose.model('CartItem', cartItemSchema);
+const Order = mongoose.model('Order', orderSchema);
 
 // Flags to disable DB writes during startup synchronization
 let isSyncing = false;
@@ -78,9 +74,9 @@ const products = new Proxy([], {
   set(target, property, value, receiver) {
     if (!isSyncing && property !== 'length' && value && value.id) {
       const productId = String(value.id);
-      DBProduct.findByPk(productId).then(exists => {
+      Product.findOne({ id: productId }).then(exists => {
         if (!exists) {
-          DBProduct.create({
+          Product.create({
             id: productId,
             title: value.title,
             description: value.description || '',
@@ -128,31 +124,43 @@ const initializeUsers = async () => {
     users.push(testUser);
 
     // Update DB
-    await DBUser.create(adminUser);
-    await DBUser.create(testUser);
+    await User.create(adminUser);
+    await User.create(testUser);
     
-    console.log('In-memory users and SQLite user database initialized successfully.');
+    console.log('In-memory users and MongoDB user database initialized successfully.');
   }
 };
 
 // Database synchronizer
 const initializeUsersStore = async () => {
   try {
-    // Sync models with database
-    await sequelize.sync();
+    if (!process.env.MONGO_URI || process.env.MONGO_URI.includes('<password>')) {
+      console.warn('WARNING: MONGO_URI is not set or contains the <password> placeholder in .env file.');
+      console.warn('Backend will fall back to using memory-only store. Please update .env with your MongoDB password.');
+      return;
+    }
+
+    console.log('Connecting to MongoDB...');
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('Connected to MongoDB successfully.');
     
     isSyncing = true;
     
     // Load Users from DB
-    const dbUsers = await DBUser.findAll();
+    const dbUsers = await User.find({});
     users.length = 0;
-    dbUsers.forEach(u => users.push(u.get({ plain: true })));
+    dbUsers.forEach(u => users.push({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      password: u.password,
+      role: u.role
+    }));
     
     // Load Products from DB
-    const dbProducts = await DBProduct.findAll();
+    const dbProducts = await Product.find({});
     products.length = 0;
-    dbProducts.forEach(p => {
-      const prod = p.get({ plain: true });
+    dbProducts.forEach(prod => {
       products.push({
         id: prod.id,
         title: prod.title,
@@ -169,56 +177,61 @@ const initializeUsersStore = async () => {
     });
 
     // Load Cart Items from DB
-    const dbCarts = await DBCartItem.findAll();
+    const dbCarts = await CartItem.find({});
     Object.keys(carts).forEach(key => delete carts[key]);
     dbCarts.forEach(item => {
-      const cartItem = item.get({ plain: true });
-      if (!carts[cartItem.userId]) {
-        carts[cartItem.userId] = [];
+      if (!carts[item.userId]) {
+        carts[item.userId] = [];
       }
-      carts[cartItem.userId].push({
-        productId: cartItem.productId,
-        quantity: cartItem.quantity
+      carts[item.userId].push({
+        productId: item.productId,
+        quantity: item.quantity
       });
     });
 
     // Load Orders from DB
-    const dbOrders = await DBOrder.findAll();
-    const dbOrderItems = await DBOrderItem.findAll();
+    const dbOrders = await Order.find({});
     orders.length = 0;
     dbOrders.forEach(o => {
-      const order = o.get({ plain: true });
-      if (order.shippingDetails) {
+      let shippingDetails = o.shippingDetails || {};
+      if (typeof shippingDetails === 'string') {
         try {
-          order.shippingDetails = JSON.parse(order.shippingDetails);
+          shippingDetails = JSON.parse(shippingDetails);
         } catch (e) {
-          order.shippingDetails = {};
+          shippingDetails = {};
         }
       }
-      order.products = dbOrderItems
-        .filter(item => item.orderId === order.id)
-        .map(item => {
-          const plainItem = item.get({ plain: true });
-          return {
-            productId: plainItem.productId,
-            title: plainItem.title,
-            price: plainItem.price,
-            quantity: plainItem.quantity,
-            image: plainItem.image
-          };
-        });
-      orders.push(order);
+      
+      orders.push({
+        id: o.id,
+        userId: o.userId,
+        subtotal: o.subtotal,
+        shippingFee: o.shippingFee,
+        tax: o.tax,
+        discount: o.discount,
+        totalAmount: o.totalAmount,
+        shippingDetails,
+        paymentMethod: o.paymentMethod,
+        orderStatus: o.orderStatus,
+        createdAt: o.createdAt,
+        products: o.products.map(item => ({
+          productId: item.productId,
+          title: item.title,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image
+        }))
+      });
     });
 
     isSyncing = false;
-
-    console.log('Database synced & cache populated successfully.');
+    console.log('Database synced & cache populated successfully from MongoDB.');
 
     // Seed default admin/user if none exist
     await initializeUsers();
   } catch (err) {
     isSyncing = false;
-    console.error('Error synchronizing database schema:', err);
+    console.error('Error synchronizing database schema with MongoDB:', err);
   }
 };
 
@@ -248,8 +261,10 @@ export const createUser = async ({ name, email, password, role = 'user' }) => {
   // Sync Memory
   users.push(newUser);
   
-  // Sync DB in background
-  DBUser.create(newUser).catch(err => console.error('DB Error creating user:', err));
+  // Sync DB in background if connected
+  if (mongoose.connection.readyState === 1) {
+    User.create(newUser).catch(err => console.error('DB Error creating user:', err));
+  }
 
   const { password: _, ...userWithoutPassword } = newUser;
   return userWithoutPassword;
@@ -282,18 +297,20 @@ export const createProduct = (productData) => {
   // Sync Memory
   products.push(newProduct);
   
-  // Sync DB in background
-  DBProduct.create({
-    id: newProduct.id,
-    title: newProduct.title,
-    description: newProduct.description,
-    price: newProduct.price,
-    category: newProduct.category,
-    image: newProduct.image,
-    stock: newProduct.stock,
-    ratingRate: newProduct.rating.rate,
-    ratingCount: newProduct.rating.count
-  }).catch(err => console.error('DB Error creating product:', err));
+  // Sync DB in background if connected
+  if (mongoose.connection.readyState === 1) {
+    Product.create({
+      id: newProduct.id,
+      title: newProduct.title,
+      description: newProduct.description,
+      price: newProduct.price,
+      category: newProduct.category,
+      image: newProduct.image,
+      stock: newProduct.stock,
+      ratingRate: newProduct.rating.rate,
+      ratingCount: newProduct.rating.count
+    }).catch(err => console.error('DB Error creating product:', err));
+  }
 
   return newProduct;
 };
@@ -315,17 +332,20 @@ export const updateProduct = (id, productData) => {
   // Sync Memory
   products[index] = updatedProduct;
   
-  // Sync DB in background
-  DBProduct.update({
-    title: updatedProduct.title,
-    description: updatedProduct.description,
-    price: updatedProduct.price,
-    category: updatedProduct.category,
-    image: updatedProduct.image,
-    stock: updatedProduct.stock
-  }, {
-    where: { id: String(id) }
-  }).catch(err => console.error('DB Error updating product:', err));
+  // Sync DB in background if connected
+  if (mongoose.connection.readyState === 1) {
+    Product.updateOne(
+      { id: String(id) },
+      {
+        title: updatedProduct.title,
+        description: updatedProduct.description,
+        price: updatedProduct.price,
+        category: updatedProduct.category,
+        image: updatedProduct.image,
+        stock: updatedProduct.stock
+      }
+    ).catch(err => console.error('DB Error updating product:', err));
+  }
 
   return updatedProduct;
 };
@@ -337,10 +357,10 @@ export const deleteProduct = (id) => {
   // Sync Memory
   products.splice(index, 1);
   
-  // Sync DB in background
-  DBProduct.destroy({
-    where: { id: String(id) }
-  }).catch(err => console.error('DB Error deleting product:', err));
+  // Sync DB in background if connected
+  if (mongoose.connection.readyState === 1) {
+    Product.deleteOne({ id: String(id) }).catch(err => console.error('DB Error deleting product:', err));
+  }
 
   return true;
 };
@@ -362,18 +382,20 @@ export const saveCart = (userId, cartItems) => {
   // Sync Memory
   carts[userId] = normalizedItems;
   
-  // Sync DB in background (clear existing and bulk create)
-  DBCartItem.destroy({ where: { userId } })
-    .then(() => {
-      if (normalizedItems.length > 0) {
-        return DBCartItem.bulkCreate(normalizedItems.map(item => ({
-          userId,
-          productId: item.productId,
-          quantity: item.quantity
-        })));
-      }
-    })
-    .catch(err => console.error('DB Error saving cart:', err));
+  // Sync DB in background (clear existing and bulk create) if connected
+  if (mongoose.connection.readyState === 1) {
+    CartItem.deleteMany({ userId })
+      .then(() => {
+        if (normalizedItems.length > 0) {
+          return CartItem.insertMany(normalizedItems.map(item => ({
+            userId,
+            productId: item.productId,
+            quantity: item.quantity
+          })));
+        }
+      })
+      .catch(err => console.error('DB Error saving cart:', err));
+  }
 
   return carts[userId];
 };
@@ -382,9 +404,10 @@ export const clearCart = (userId) => {
   // Sync Memory
   carts[userId] = [];
   
-  // Sync DB in background
-  DBCartItem.destroy({ where: { userId } })
-    .catch(err => console.error('DB Error clearing cart:', err));
+  // Sync DB in background if connected
+  if (mongoose.connection.readyState === 1) {
+    CartItem.deleteMany({ userId }).catch(err => console.error('DB Error clearing cart:', err));
+  }
 
   return [];
 };
@@ -415,31 +438,23 @@ export const createOrder = (userId, orderItems, pricingDetails, shippingDetails,
   // Sync Memory
   orders.push(newOrder);
   
-  // Sync DB in background
-  DBOrder.create({
-    id: newOrder.id,
-    userId: newOrder.userId,
-    subtotal: newOrder.subtotal,
-    shippingFee: newOrder.shippingFee,
-    tax: newOrder.tax,
-    discount: newOrder.discount,
-    totalAmount: newOrder.totalAmount,
-    shippingDetails: JSON.stringify(newOrder.shippingDetails),
-    paymentMethod: newOrder.paymentMethod,
-    orderStatus: newOrder.orderStatus,
-    createdAt: newOrder.createdAt
-  })
-  .then(() => {
-    return DBOrderItem.bulkCreate(newOrder.products.map(item => ({
-      orderId: newOrder.id,
-      productId: item.productId,
-      title: item.title,
-      price: item.price,
-      quantity: item.quantity,
-      image: item.image
-    })));
-  })
-  .catch(err => console.error('DB Error creating order:', err));
+  // Sync DB in background if connected
+  if (mongoose.connection.readyState === 1) {
+    Order.create({
+      id: newOrder.id,
+      userId: newOrder.userId,
+      products: newOrder.products,
+      subtotal: newOrder.subtotal,
+      shippingFee: newOrder.shippingFee,
+      tax: newOrder.tax,
+      discount: newOrder.discount,
+      totalAmount: newOrder.totalAmount,
+      shippingDetails: newOrder.shippingDetails,
+      paymentMethod: newOrder.paymentMethod,
+      orderStatus: newOrder.orderStatus,
+      createdAt: newOrder.createdAt
+    }).catch(err => console.error('DB Error creating order:', err));
+  }
 
   return newOrder;
 };
@@ -464,8 +479,10 @@ export const updateUserPassword = async (email, newRawPassword) => {
   // Update in-memory
   users[index].password = hashedPassword;
   
-  // Update SQLite
-  await DBUser.update({ password: hashedPassword }, { where: { email: email.toLowerCase() } });
+  // Update DB if connected
+  if (mongoose.connection.readyState === 1) {
+    await User.updateOne({ email: email.toLowerCase() }, { password: hashedPassword });
+  }
   return true;
 };
 
@@ -473,4 +490,3 @@ export const updateUserPassword = async (email, newRawPassword) => {
 const initializeUsersExport = initializeUsersStore;
 
 export { users, products, carts, orders, initializeUsersExport as initializeUsers };
-

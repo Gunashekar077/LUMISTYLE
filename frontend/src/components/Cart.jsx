@@ -57,7 +57,7 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onClearCart }) =>
             <img src={item.image} alt={item.title} />
             <div className="cart-item-details">
               <p className="item-title">{item.title}</p>
-              <p className="item-price">${item.price.toFixed(2)}</p>
+              <p className="item-price">₹{(item.price * 80).toLocaleString('en-IN')}</p>
               
               {/* Quantity selectors */}
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "4px" }}>
@@ -100,7 +100,7 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onClearCart }) =>
               </div>
 
               <p className="item-total" style={{ marginTop: "8px" }}>
-                Total: ${(item.price * item.quantity).toFixed(2)}
+                Total: ₹{(item.price * item.quantity * 80).toLocaleString('en-IN')}
               </p>
             </div>
             <button
@@ -115,7 +115,7 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onClearCart }) =>
       </div>
       
       <div className="cart-summary" style={{ width: "100%" }}>
-        <h3>Total Amount: ${totalAmount.toFixed(2)}</h3>
+        <h3>Total Amount: ₹{(totalAmount * 80).toLocaleString('en-IN')}</h3>
         <button 
           className="checkout-btn" 
           onClick={handleCheckout}

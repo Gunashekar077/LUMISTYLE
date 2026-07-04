@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    /* Primary Colors & Accents */
+    --accent-blue: #ff2a85; /* Vibrant Neon Pink */
+    --accent-blue-hover: #e01a70;
+    --accent-purple: #8b5cf6; /* Soft Electric Purple */
+    --accent-purple-hover: #7c3aed;
+    --accent-yellow: #facc15; /* Bright Yellow */
+    --accent-gradient: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+    --accent-glow: rgba(255, 42, 133, 0.15);
+
+    /* Light Theme (Default) */
+    --bg-main: #F1F5F9;
+    --bg-surface: #F8FAFC;
+    --bg-glass: rgba(248, 250, 252, 0.75);
+    --border-glass: rgba(248, 250, 252, 0.4);
+    --border-color: rgba(0, 0, 0, 0.06);
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-inverse: #f8fafc;
+    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+    --card-hover-shadow: 0 20px 40px rgba(255, 42, 133, 0.1);
+    
+    /* Animation transitions */
+    --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-quick: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 8px;
+}
+
+/* Dark Theme Variables */
+body.dark-mode {
+    --bg-main: #0B0F19; /* Sophisticated Deep Obsidian */
+    --bg-surface: #161B26; /* Slightly lighter dark tint for depth */
+    --bg-glass: rgba(11, 15, 25, 0.75); /* Translucent obsidian background */
+    --border-glass: rgba(255, 255, 255, 0.08); /* Faint bottom/border glass color */
+    --border-color: rgba(255, 255, 255, 0.12); /* Soft-contrast border */
+    --text-main: #E2E8F0; /* Off-white for legible, soft typography */
+    --text-muted: #94A3B8; /* Muted gray for secondary text and placeholders */
+    --text-inverse: #0B0F19;
+    --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --card-hover-shadow: 0 20px 45px rgba(255, 42, 133, 0.2);
+    --accent-glow: rgba(255, 42, 133, 0.25);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-muted) transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    overflow-x: hidden;
+}
+
+#root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 20px;
+    opacity: 0.5;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-blue);
+}
+
+/* Custom Selection */
+::selection {
+    background-color: var(--accent-blue);
+    color: #ffffff;
+}
+
+/* Custom Custom Animated Cursor (Only for desktops) */
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-blue);
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+    mix-blend-mode: difference;
+}
+
+.custom-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent-purple);
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Hover effects for cursor */
+.cursor-hover .custom-cursor {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(37, 99, 235, 0.1);
+    border-color: var(--accent-purple);
+}
+
+/* Skeleton Loading Shimmer */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-main) 25%,
+        var(--border-color) 50%,
+        var(--bg-main) 75%
+    );
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+    border-radius: 12px;
+}
+
+@keyframes loading-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Scroll Progress Bar at the top of the screen */
+.scroll-progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 1000;
+    background: transparent;
+    pointer-events: none;
+}
+
+.scroll-progress-bar {
+    height: 100%;
+    background: var(--accent-gradient);
+    width: 0%;
+    transition: width 0.1s ease-out;
+}
+
+/* Back-to-Top Floating Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: var(--transition-smooth);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background-color: var(--accent-blue);
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    border-color: var(--accent-blue);
+}
+
+/* Ripple Button Effect */
+.btn-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Glass panels */
+.glass-panel {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--card-shadow);
+}

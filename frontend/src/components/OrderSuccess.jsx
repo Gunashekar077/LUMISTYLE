@@ -162,7 +162,7 @@ const OrderSuccess = () => {
                     <p className="receipt-item-qty">Qty: {item.quantity}</p>
                   </div>
                   <div className="receipt-item-price">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ₹{(item.price * item.quantity * 80).toLocaleString('en-IN')}
                   </div>
                 </div>
               ))}
@@ -172,29 +172,29 @@ const OrderSuccess = () => {
             <div className="receipt-pricing-panel">
               <div className="pricing-row">
                 <span className="pricing-row-label">Subtotal</span>
-                <span>${(order.subtotal || order.totalAmount).toFixed(2)}</span>
+                <span>₹{((order.subtotal || order.totalAmount) * 80).toLocaleString('en-IN')}</span>
               </div>
               
               {order.discount > 0 && (
                 <div className="pricing-row-discount">
                   <span>Discount</span>
-                  <span>-${(order.discount || 0).toFixed(2)}</span>
+                  <span>-₹{(order.discount * 80).toLocaleString('en-IN')}</span>
                 </div>
               )}
 
               <div className="pricing-row">
                 <span className="pricing-row-label">Shipping Fee</span>
-                <span>{order.shippingFee === 0 ? 'FREE' : `$${(order.shippingFee || 0).toFixed(2)}`}</span>
+                <span>{order.shippingFee === 0 ? 'FREE' : `₹${(order.shippingFee * 80).toLocaleString('en-IN')}`}</span>
               </div>
 
               <div className="pricing-row">
                 <span className="pricing-row-label">Tax (8%)</span>
-                <span>${order.tax ? order.tax.toFixed(2) : '0.00'}</span>
+                <span>₹{((order.tax || 0) * 80).toLocaleString('en-IN')}</span>
               </div>
 
               <div className="pricing-row-total">
                 <span>Grand Total</span>
-                <span className="pricing-row-total-value">${order.totalAmount.toFixed(2)}</span>
+                <span className="pricing-row-total-value">₹{(order.totalAmount * 80).toLocaleString('en-IN')}</span>
               </div>
             </div>
           </div>

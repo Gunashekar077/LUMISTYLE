@@ -82,15 +82,17 @@
 }
 
 .checkout-input {
-    background: rgba(255, 255, 255, 0.04) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: #fff !important;
+    background: rgba(11, 15, 25, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: var(--text-main) !important;
+    border-radius: 10px;
     width: 100%;
+    transition: all 0.25s ease;
 }
 
 .checkout-input:focus {
-    border-color: var(--primary) !important;
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+    border-color: var(--accent-blue) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
 }
 
 /* Payment Selectors */
@@ -119,8 +121,8 @@
 }
 
 .payment-option-card.active {
-    border-color: var(--primary);
-    background: rgba(99, 102, 241, 0.15);
+    border-color: var(--accent-blue);
+    background: rgba(255, 42, 133, 0.1);
 }
 
 .payment-card-icon {
@@ -129,7 +131,7 @@
 }
 
 .payment-option-card.active .payment-card-icon {
-    color: var(--primary);
+    color: var(--accent-blue);
 }
 
 .payment-card-details {
@@ -170,7 +172,7 @@
     width: 48px;
     height: 48px;
     object-fit: contain;
-    background-color: white;
+    background-color: var(--bg-main);
     padding: 2px;
     border-radius: 6px;
 }
@@ -230,16 +232,22 @@
 .coupon-input-field {
     flex: 1;
     background: rgba(11, 15, 25, 0.6) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
     border-radius: 8px !important;
     padding: 8px 12px !important;
-    color: #fff !important;
+    color: var(--text-main) !important;
     outline: none !important;
     font-size: 0.85rem !important;
+    transition: all 0.25s ease;
+}
+
+.coupon-input-field:focus {
+    border-color: var(--accent-blue) !important;
+    box-shadow: 0 0 0 2px var(--accent-glow) !important;
 }
 
 .coupon-apply-btn {
-    background-color: var(--primary);
+    background-color: var(--accent-blue);
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -247,11 +255,11 @@
     font-size: 0.85rem;
     cursor: pointer;
     font-weight: 600;
-    transition: var(--transition);
+    transition: var(--transition-quick);
 }
 
 .coupon-apply-btn:hover {
-    background-color: var(--primary-hover);
+    background-color: var(--accent-blue-hover);
 }
 
 .coupon-status-msg {
@@ -301,7 +309,7 @@
 .place-order-submit-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
+    background: var(--accent-gradient);
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -312,17 +320,18 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.35);
-    transition: var(--transition);
+    box-shadow: 0 8px 20px rgba(255, 42, 133, 0.2);
+    transition: var(--transition-smooth);
 }
 
 .place-order-submit-btn:disabled {
     cursor: not-allowed;
-    opacity: 0.8;
+    opacity: 0.6;
 }
 
 .place-order-submit-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(255, 42, 133, 0.35);
 }
 
 /* Order Success Receipt Styles */
@@ -559,7 +568,7 @@
     width: 55px;
     height: 55px;
     object-fit: contain;
-    background-color: white;
+    background-color: var(--bg-main);
     padding: 2px;
     border-radius: 8px;
 }
