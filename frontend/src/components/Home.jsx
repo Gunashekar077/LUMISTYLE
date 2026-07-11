@@ -673,7 +673,7 @@ const Home = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
         </div>
 
         <div className="footer-bottom-panel">
-          <p>© 2026 Urban Cart Inc. All Rights Reserved. Designed for uncompromised luxury.</p>
+          <p>© 2026 LUMISTYLE Inc. All Rights Reserved. Designed for uncompromised luxury.</p>
           <div className="footer-payments">
             <span style={{ fontSize: "0.85rem", marginRight: "8px", fontWeight: "600" }}>We Accept:</span>
             <span>💳 PayPal, Apple Pay, Visa, Stripe</span>

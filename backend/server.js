@@ -127,11 +127,11 @@ const seedProducts = async () => {
     console.log(`Seeded ${products.length} fallback products.`);
   }
 
-  // Custom DG-FASHION luxury additions
+  // Custom LUMISTYLE luxury additions
   const customItems = [
     {
       id: 21,
-      title: "DG-FASHION 'AURA' Premium Obsidian Trench Coat",
+      title: "LUMISTYLE 'AURA' Premium Obsidian Trench Coat",
       price: 249.99,
       description: "An avant-garde long trench coat crafted from a water-resistant technical cotton blend. Featuring architectural lapels, deep utility pockets, and a matte black magnetic belt clasp. Styled for absolute luxury and seamless design system compliance.",
       category: "men's clothing",
@@ -141,7 +141,7 @@ const seedProducts = async () => {
     },
     {
       id: 22,
-      title: "DG-FASHION 'NOVA' Electric Pink Knit Crop Top",
+      title: "LUMISTYLE 'NOVA' Electric Pink Knit Crop Top",
       price: 89.99,
       description: "A vibrant cropped knitwear piece crafted from organic mercerized cotton. Featuring ribbed cuffs, an athletic racerback design, and subtle electric purple accents around the seams. Perfect for energetic everyday styling.",
       category: "women's clothing",
@@ -151,7 +151,7 @@ const seedProducts = async () => {
     },
     {
       id: 23,
-      title: "DG-FASHION 'KRONOS' Smart Sleek Audio Sunglasses",
+      title: "LUMISTYLE 'KRONOS' Smart Sleek Audio Sunglasses",
       price: 179.99,
       description: "Tech-fashion at its peak. Polarized UV400 lenses housed in a lightweight matte black titanium frame. Equipped with open-ear dual speaker micro-drivers, Bluetooth 5.2 connectivity, and touch-sensitive temples for intuitive music controls.",
       category: "electronics",
@@ -161,7 +161,7 @@ const seedProducts = async () => {
     },
     {
       id: 24,
-      title: "DG-FASHION 'VORTEX' Gold Chain Crescent Pendant",
+      title: "LUMISTYLE 'VORTEX' Gold Chain Crescent Pendant",
       price: 129.99,
       description: "A stunning minimalist jewelry item cast in solid sterling silver and plated in 18k yellow gold. Featuring a micro-set cubic zirconia crescent moon centerpiece suspended on a delicate 45cm adjustable box chain.",
       category: "jewelery",
@@ -171,7 +171,7 @@ const seedProducts = async () => {
     },
     {
       id: 25,
-      title: "DG-FASHION 'NOIR' Luxury Leather Chelsea Boots",
+      title: "LUMISTYLE 'NOIR' Luxury Leather Chelsea Boots",
       price: 189.99,
       description: "Handcrafted in Italy from full-grain calfskin leather. Fitted with flexible elastic side panels, a premium leather lining, and a durable stacked heel. Sleek, minimalist, and built for ultimate comfort.",
       category: "men's clothing",
@@ -181,7 +181,7 @@ const seedProducts = async () => {
     },
     {
       id: 26,
-      title: "DG-FASHION 'VALENCE' Cropped Obsidian Puffer Jacket",
+      title: "LUMISTYLE 'VALENCE' Cropped Obsidian Puffer Jacket",
       price: 219.99,
       description: "A high-gloss cropped puffer jacket insulated with premium down fill. Designed with a high funnel collar, water-resistant zippers, and adjustable elastic drawcords at the waist hem.",
       category: "women's clothing",
@@ -191,7 +191,7 @@ const seedProducts = async () => {
     },
     {
       id: 27,
-      title: "DG-FASHION 'ECLIPSE' Active Hybrid Sport Earbuds",
+      title: "LUMISTYLE 'ECLIPSE' Active Hybrid Sport Earbuds",
       price: 149.99,
       description: "Next-generation active noise-canceling earbuds. Featuring custom-tuned 11mm drivers, IPX7 sweatproof resistance, and an ergonomic secure-fit earhook. Delivers deep, resonant sound for up to 30 hours.",
       category: "electronics",
@@ -201,7 +201,7 @@ const seedProducts = async () => {
     },
     {
       id: 28,
-      title: "DG-FASHION 'LUNA' Sterling Silver Pearl Drop Earrings",
+      title: "LUMISTYLE 'LUNA' Sterling Silver Pearl Drop Earrings",
       price: 99.99,
       description: "Delicate drop earrings crafted from sterling silver. Adorned with premium cultured freshwater pearls suspended below a micro-set starburst cubic zirconia stud. Pure understated elegance.",
       category: "jewelery",
@@ -257,4 +257,4 @@ const startServer = async () => {
 };
 
 startServer();
-// Trigger nodemon restart after product images database migration
+// Trigger nodemon restart after product title renaming database migration
