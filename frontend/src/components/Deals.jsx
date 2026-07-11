@@ -221,7 +221,7 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
                     className="flash-product-img" 
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                      e.target.src = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300';
                     }}
                   />
                   <span className="flash-discount-badge">50% OFF</span>
@@ -292,7 +292,7 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
                 alt={featuredDeal.title} 
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                  e.target.src = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300';
                 }}
               />
               <span className="masonry-discount-badge">60% OFF</span>
@@ -337,7 +337,7 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
                       alt={prod.title} 
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                        e.target.src = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300';
                       }}
                     />
                     <span className="supporting-discount-badge">30% OFF</span>
@@ -386,7 +386,7 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
                   alt={prod.title} 
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                    e.target.src = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300';
                   }}
                 />
                 <div className="bogo-badge">BUY 1 GET 1</div>
@@ -418,7 +418,7 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
                     alt={prod.title} 
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                      e.target.src = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300';
                     }}
                   />
                   <button 

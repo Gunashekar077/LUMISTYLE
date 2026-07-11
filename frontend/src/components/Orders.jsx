@@ -108,12 +108,12 @@ const Orders = () => {
                 {order.products?.map((item, idx) => (
                   <div key={idx} className="order-item-detail-row">
                     <img 
-                      src={item.image || 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300'} 
+                      src={item.image || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300'} 
                       alt={item.title} 
                       className="order-item-thumbnail"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                        e.target.src = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300';
                       }}
                     />
                     <div className="order-item-info">
