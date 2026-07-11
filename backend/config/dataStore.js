@@ -146,7 +146,7 @@ const initializeUsers = async () => {
 // Database synchronizer
 const initializeUsersStore = async () => {
   try {
-    const dbUri = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb+srv://reddigunashekar_db_user:Gunareddi077@cluster0.u0hlsjw.mongodb.net/urbancart?retryWrites=true&w=majority';
+    const dbUri = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb+srv://reddigunashekar_db_user:Gunareddi077@cluster0.u0hlsjw.mongodb.net/lumistyle?retryWrites=true&w=majority';
 
     if (!dbUri || dbUri.includes('<password>')) {
       console.warn('WARNING: MONGO_URI/MONGODB_URI is not set or contains the <password> placeholder.');

@@ -234,3 +234,4 @@ const startServer = async () => {
 };
 
 startServer();
+// Trigger nodemon restart for new database env configuration
