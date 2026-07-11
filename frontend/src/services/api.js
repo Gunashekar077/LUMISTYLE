@@ -21,7 +21,7 @@ const getBaseURL = () => {
   }
   
   // Otherwise, use the production Render API URL
-  return 'https://lumistyle.onrender.com/api';
+  return 'https://lumistyle-7yox.onrender.com/api';
 };
 
 const API = axios.create({
