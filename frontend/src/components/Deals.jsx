@@ -215,7 +215,15 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
             return (
               <div key={prod.id} className="flash-sale-card">
                 <div className="flash-card-img-wrapper">
-                  <img src={prod.image} alt={prod.title} className="flash-product-img" />
+                  <img 
+                    src={prod.image} 
+                    alt={prod.title} 
+                    className="flash-product-img" 
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                    }}
+                  />
                   <span className="flash-discount-badge">50% OFF</span>
                   
                   {/* Actions overlay */}
@@ -279,7 +287,14 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
           {/* Featured Large Deal */}
           <div className="masonry-deal-card featured-masonry-card">
             <div className="masonry-img-side">
-              <img src={featuredDeal.image} alt={featuredDeal.title} />
+              <img 
+                src={featuredDeal.image} 
+                alt={featuredDeal.title} 
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                }}
+              />
               <span className="masonry-discount-badge">60% OFF</span>
             </div>
             <div className="masonry-details-side">
@@ -317,7 +332,14 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
               return (
                 <div key={prod.id} className="supporting-deal-card">
                   <div className="supporting-img-wrapper">
-                    <img src={prod.image} alt={prod.title} />
+                    <img 
+                      src={prod.image} 
+                      alt={prod.title} 
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                      }}
+                    />
                     <span className="supporting-discount-badge">30% OFF</span>
                     
                     <button 
@@ -359,7 +381,14 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
           <div className="bogo-products-showcase">
             {bogoProducts.map(prod => (
               <div key={prod.id} className="bogo-product-card">
-                <img src={prod.image} alt={prod.title} />
+                <img 
+                  src={prod.image} 
+                  alt={prod.title} 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                  }}
+                />
                 <div className="bogo-badge">BUY 1 GET 1</div>
                 <h4>{prod.title}</h4>
               </div>
@@ -384,7 +413,14 @@ const Deals = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
             return (
               <div key={prod.id} className="rec-product-card">
                 <div className="rec-img-wrapper">
-                  <img src={prod.image} alt={prod.title} />
+                  <img 
+                    src={prod.image} 
+                    alt={prod.title} 
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                    }}
+                  />
                   <button 
                     onClick={() => toggleWishlist(prod)} 
                     className={`rec-wishlist-btn ${isWishlisted ? "wishlisted" : ""}`}

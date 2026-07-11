@@ -57,7 +57,14 @@ const ProductModal = ({ product, onClose, onAddToCart }) => {
 
         {/* Left Side: Product Image */}
         <div className="modal-image-section-custom">
-          <img src={product.image} alt={product.title} />
+          <img 
+            src={product.image} 
+            alt={product.title} 
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+            }}
+          />
         </div>
 
         {/* Right Side: Product Details */}

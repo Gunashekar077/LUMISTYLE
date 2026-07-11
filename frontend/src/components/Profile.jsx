@@ -335,7 +335,15 @@ const Profile = ({ currentUser, onUpdateProfile }) => {
                     <div className="profile-order-items-grid">
                       {order.products?.map((item, pIdx) => (
                         <div key={pIdx} className="profile-order-item-row">
-                          <img src={item.image} alt={item.title} className="order-item-thumb" />
+                          <img 
+                            src={item.image} 
+                            alt={item.title} 
+                            className="order-item-thumb" 
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                            }}
+                          />
                           <div className="order-item-details">
                             <p className="order-item-name">{item.title}</p>
                             <span className="order-item-qty">Qty: {item.quantity}</span>

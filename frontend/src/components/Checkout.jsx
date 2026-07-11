@@ -444,7 +444,15 @@ const Checkout = ({ cartItems, onClearCart }) => {
             <div className="summary-items-list">
               {cartItems.map((item) => (
                 <div key={item.productId || item.id} className="summary-item-row">
-                  <img src={item.image} alt={item.title} className="summary-item-img" />
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="summary-item-img" 
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                    }}
+                  />
                   <div className="summary-item-info">
                     <span className="summary-item-title">{item.title}</span>
                     <span className="summary-item-price">Qty: {item.quantity}</span>

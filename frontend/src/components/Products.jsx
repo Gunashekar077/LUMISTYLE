@@ -267,7 +267,15 @@ const Products = ({ onAddToCart, wishlistItems = [], toggleWishlist }) => {
                     {prod.price < 50 && <span className="card-badge new">New</span>}
 
                     <div className="card-img-wrapper">
-                      <img src={prod.image} alt={prod.title} className="card-img-main" />
+                      <img 
+                        src={prod.image} 
+                        alt={prod.title} 
+                        className="card-img-main" 
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+                        }}
+                      />
                       
                       {/* Action overlays */}
                       <div className="card-action-overlay">

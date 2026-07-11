@@ -54,7 +54,14 @@ const Cart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onClearCart }) =>
       <div className="cart-items" style={{ width: "100%" }}>
         {cartItems.map((item) => (
           <div key={item.id} className="cart-item">
-            <img src={item.image} alt={item.title} />
+            <img 
+              src={item.image} 
+              alt={item.title} 
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300';
+              }}
+            />
             <div className="cart-item-details">
               <p className="item-title">{item.title}</p>
               <p className="item-price">₹{(item.price * 80).toLocaleString('en-IN')}</p>
