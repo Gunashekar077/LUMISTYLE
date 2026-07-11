@@ -54,12 +54,12 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
+  if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
     return res.status(400).json({ message: 'Please enter both email and password.' });
   }
 
   try {
-    const rawUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    const rawUser = getUserByEmail(email);
 
     if (!rawUser) {
       return res.status(404).json({ message: 'Account not found.' });

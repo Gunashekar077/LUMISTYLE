@@ -99,7 +99,7 @@ const generateId = () => Math.random().toString(36).substring(2, 9);
 
 // Initialize data store with default users
 const initializeUsers = async () => {
-  const hasRebrandedUser = users.some(u => u.email.toLowerCase() === 'user@lumistyle.com');
+  const hasRebrandedUser = users.some(u => u && u.email && typeof u.email === 'string' && u.email.toLowerCase() === 'user@lumistyle.com');
   if (!hasRebrandedUser) {
     const adminPassword = await bcrypt.hash('admin123', 10);
     const userPassword = await bcrypt.hash('user123', 10);
@@ -121,7 +121,7 @@ const initializeUsers = async () => {
     };
 
     // Stage in memory if not already present
-    if (!users.some(u => u.email.toLowerCase() === 'admin@lumistyle.com')) {
+    if (!users.some(u => u && u.email && typeof u.email === 'string' && u.email.toLowerCase() === 'admin@lumistyle.com')) {
       users.push(adminUser);
     }
     users.push(testUser);
@@ -146,10 +146,10 @@ const initializeUsers = async () => {
 // Database synchronizer
 const initializeUsersStore = async () => {
   try {
-    const dbUri = process.env.MONGO_URI || 'mongodb+srv://reddigunashekar_db_user:qGvDhdIGeEhna78W@cluster0.u0hlsjw.mongodb.net/urbancart?retryWrites=true&w=majority';
+    const dbUri = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb+srv://reddigunashekar_db_user:qGvDhdIGeEhna78W@cluster0.u0hlsjw.mongodb.net/urbancart?retryWrites=true&w=majority';
 
     if (!dbUri || dbUri.includes('<password>')) {
-      console.warn('WARNING: MONGO_URI is not set or contains the <password> placeholder.');
+      console.warn('WARNING: MONGO_URI/MONGODB_URI is not set or contains the <password> placeholder.');
       console.warn('Backend will fall back to using memory-only store. Please update .env or environment variables with your MongoDB password.');
       return;
     }
@@ -251,7 +251,8 @@ const initializeUsersStore = async () => {
 
 // Users functions
 export const getUserByEmail = (email) => {
-  return users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (!email || typeof email !== 'string') return null;
+  return users.find(u => u && u.email && typeof u.email === 'string' && u.email.toLowerCase() === email.toLowerCase());
 };
 
 export const getUserById = (id) => {
@@ -486,8 +487,9 @@ export const getOrderById = (id) => {
 };
 
 export const updateUserPassword = async (email, newRawPassword) => {
+  if (!email || typeof email !== 'string') return false;
   const hashedPassword = await bcrypt.hash(newRawPassword, 10);
-  const index = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+  const index = users.findIndex(u => u && u.email && typeof u.email === 'string' && u.email.toLowerCase() === email.toLowerCase());
   if (index === -1) return false;
   
   // Update in-memory
