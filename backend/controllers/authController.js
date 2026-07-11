@@ -29,7 +29,7 @@ export const registerUser = async (req, res) => {
 
     // Determine role (e.g. admin if email contains admin@lumistyle.com or has a query parameter for dev/seed purposes)
     let role = 'user';
-    if (email.toLowerCase().endsWith('@lumistyle.admin') || email.toLowerCase() === 'admin@lumistyle.com' || email.toLowerCase().endsWith('@urbancart.admin') || email.toLowerCase() === 'admin@urbancart.com') {
+    if (email.toLowerCase().endsWith('@lumistyle.admin') || email.toLowerCase() === 'admin@lumistyle.com') {
       role = 'admin';
     }
 
