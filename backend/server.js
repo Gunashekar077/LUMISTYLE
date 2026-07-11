@@ -46,7 +46,12 @@ const seedProducts = async () => {
 
   try {
     console.log('Fetching initial products from Fake Store API...');
-    const response = await fetch('https://fakestoreapi.com/products');
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 seconds timeout
+    
+    const response = await fetch('https://fakestoreapi.com/products', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    
     if (response.ok) {
       const data = await response.json();
       data.forEach(item => {
@@ -70,7 +75,7 @@ const seedProducts = async () => {
       console.log('Successfully loaded Fake Store API products with Unsplash image mapping.');
     }
   } catch (error) {
-    console.warn('Unable to seed/map products from Fake Store API:', error.message);
+    console.warn('Unable to seed/map products from Fake Store API (possibly offline/slow):', error.message);
   }
 
   // Seeding custom items
@@ -198,7 +203,7 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   // Initialize in-memory records
   await initializeUsers();
-  await seedProducts();
+  seedProducts(); // Seed in background so server starts immediately without hanging on slow APIs
 
   app.listen(PORT, () => {
     console.log(`Server running in development mode on port ${PORT}`);
