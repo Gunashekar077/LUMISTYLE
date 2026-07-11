@@ -1,8 +1,17 @@
 import axios from 'axios';
 
-// Create API instance
+// Dynamically determine the backend API URL based on the current page's hostname.
+// This allows mobile devices and other local network users to reach the backend on port 5000.
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+  return `http://${hostname}:5000/api`;
+};
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },
