@@ -55,13 +55,18 @@ export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: 'Please provide email and password' });
+    return res.status(400).json({ message: 'Please enter both email and password.' });
   }
 
   try {
     const rawUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
-    if (rawUser && (await bcrypt.compare(password, rawUser.password))) {
+    if (!rawUser) {
+      return res.status(404).json({ message: 'Account not found.' });
+    }
+
+    const isMatch = await bcrypt.compare(password, rawUser.password);
+    if (isMatch) {
       res.json({
         _id: rawUser.id,
         name: rawUser.name,
@@ -70,11 +75,11 @@ export const loginUser = async (req, res) => {
         token: generateToken(rawUser.id),
       });
     } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+      res.status(401).json({ message: 'Email or password is incorrect.' });
     }
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error during login' });
+    res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 };
 

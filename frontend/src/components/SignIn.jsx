@@ -163,7 +163,7 @@ const SignIn = ({ setIsAuthenticated }) => {
       }, 1500);
     } catch (err) {
       setIsLoading(false);
-      const message = err.response?.data?.message || `Failed to ${isRegistering ? 'register' : 'sign in'}. Please check your credentials.`;
+      const message = err.response?.data?.message || "Server error. Please try again later.";
       setApiError(message);
       console.error('Authentication Error:', err);
     }
