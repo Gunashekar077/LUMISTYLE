@@ -7,9 +7,6 @@ import {
   FaUser, 
   FaEnvelope, 
   FaLock, 
-  FaGoogle, 
-  FaApple, 
-  FaFacebookF, 
   FaArrowLeft,
   FaSun,
   FaMoon
@@ -137,33 +134,6 @@ const SignIn = ({ setIsAuthenticated }) => {
     setApiError(null);
   };
 
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    setApiError(null);
-    try {
-      // Simulate Google login delay for natural experience
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Under the hood, login using default test user credentials
-      const data = await authService.login('user@lumistyle.com', 'user123');
-      
-      setIsLoading(false);
-      setIsSuccess(true);
-      
-      localStorage.setItem("isAuthenticated", "true");
-      if (setIsAuthenticated) {
-        setIsAuthenticated(true);
-      }
-      
-      setTimeout(() => {
-        navigate("/home");
-      }, 1500);
-    } catch (err) {
-      setIsLoading(false);
-      setApiError("Google Sign-In failed. Please try again.");
-      console.error('Google Auth Error:', err);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -606,29 +576,7 @@ const SignIn = ({ setIsAuthenticated }) => {
               </button>
             </form>
 
-            {/* Social Logins Divider */}
-            <div className="social-divider">
-              <span>or continue with</span>
-            </div>
 
-            {/* Social Logins Buttons */}
-            <div className="social-buttons-grid">
-              <button 
-                type="button" 
-                className="social-btn" 
-                title="Sign In with Google"
-                onClick={handleGoogleSignIn}
-                disabled={isLoading}
-              >
-                <FaGoogle />
-              </button>
-              <button className="social-btn" title="Sign In with Apple">
-                <FaApple />
-              </button>
-              <button className="social-btn" title="Sign In with Facebook">
-                <FaFacebookF />
-              </button>
-            </div>
 
             <div className="signup-prompt">
               {isRegistering ? "Already have an account?" : "Don't have an account?"}{" "}
