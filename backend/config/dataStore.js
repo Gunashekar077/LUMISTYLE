@@ -72,7 +72,7 @@ const orders = [];
 // Proxy array for products to auto-save items pushed into it (like the seed data in server.js)
 const products = new Proxy([], {
   set(target, property, value, receiver) {
-    if (!isSyncing && property !== 'length' && value && value.id) {
+    if (mongoose.connection.readyState === 1 && !isSyncing && property !== 'length' && value && value.id) {
       const productId = String(value.id);
       Product.findOne({ id: productId }).then(exists => {
         if (!exists) {
