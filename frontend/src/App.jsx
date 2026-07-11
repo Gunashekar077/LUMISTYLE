@@ -89,9 +89,7 @@ const App = () => {
   ]);
   const [chatInput, setChatInput] = useState("");
 
-  // Custom Cursor Positions
-  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
-  const [isCursorHovering, setIsCursorHovering] = useState(false);
+  // Device Detection
   const [isMobileDevice, setIsMobileDevice] = useState(false);
 
   // Sync Theme class
@@ -223,17 +221,6 @@ const App = () => {
     };
     window.addEventListener("scroll", handleScroll);
 
-    const handleMouseMove = (e) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
-      const target = e.target;
-      const isHoverable = target.closest("a, button, select, input, textarea, .clickable, [role='button']");
-      setIsCursorHovering(!!isHoverable);
-    };
-    
-    if (window.innerWidth > 768) {
-      window.addEventListener("mousemove", handleMouseMove);
-    }
-
     const splashTimeout = setTimeout(() => {
       setIsSplashLoading(false);
     }, 1200);
@@ -241,7 +228,6 @@ const App = () => {
     return () => {
       window.removeEventListener("resize", checkMobile);
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", handleMouseMove);
       clearTimeout(splashTimeout);
     };
   }, []);
@@ -377,13 +363,7 @@ const App = () => {
         <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }}></div>
       </div>
 
-      {/* Custom Cursor */}
-      {!isMobileDevice && location.pathname !== "/about" && (
-        <div className={isCursorHovering ? "cursor-hover" : ""}>
-          <div className="custom-cursor" style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}></div>
-          <div className="custom-cursor-dot" style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}></div>
-        </div>
-      )}
+
 
       {/* Floating Header */}
       <Header 

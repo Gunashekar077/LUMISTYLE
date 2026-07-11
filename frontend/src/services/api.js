@@ -7,7 +7,21 @@ const getBaseURL = () => {
     return import.meta.env.VITE_API_URL;
   }
   const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-  return `http://${hostname}:5000/api`;
+  
+  // If it's a local address, connect to local backend on port 5000
+  if (
+    hostname === 'localhost' || 
+    hostname === '127.0.0.1' || 
+    hostname.startsWith('192.168.') || 
+    hostname.startsWith('10.') || 
+    hostname.startsWith('172.') ||
+    !hostname.includes('.')
+  ) {
+    return `http://${hostname}:5000/api`;
+  }
+  
+  // Otherwise, use the production Render API URL
+  return 'https://lumistyle.onrender.com/api';
 };
 
 const API = axios.create({
