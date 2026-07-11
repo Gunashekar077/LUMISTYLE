@@ -146,14 +146,16 @@ const initializeUsers = async () => {
 // Database synchronizer
 const initializeUsersStore = async () => {
   try {
-    if (!process.env.MONGO_URI || process.env.MONGO_URI.includes('<password>')) {
-      console.warn('WARNING: MONGO_URI is not set or contains the <password> placeholder in .env file.');
-      console.warn('Backend will fall back to using memory-only store. Please update .env with your MongoDB password.');
+    const dbUri = process.env.MONGO_URI || 'mongodb+srv://reddigunashekar_db_user:qGvDhdIGeEhna78W@cluster0.u0hlsjw.mongodb.net/urbancart?retryWrites=true&w=majority';
+
+    if (!dbUri || dbUri.includes('<password>')) {
+      console.warn('WARNING: MONGO_URI is not set or contains the <password> placeholder.');
+      console.warn('Backend will fall back to using memory-only store. Please update .env or environment variables with your MongoDB password.');
       return;
     }
 
     console.log('Connecting to MongoDB...');
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(dbUri);
     console.log('Connected to MongoDB successfully.');
     
     isSyncing = true;
